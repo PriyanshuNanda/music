@@ -1,0 +1,70 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'dev.flutter.flutter-gradle-plugin'
+    id 'com.chaquo.python'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+}
+
+android {
+    namespace "com.example.ymusic"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.example.ymusic"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
+
+        python {
+            version "3.8"
+            buildPython "C:\\Users\\priya\\AppData\\Local\\Programs\\Python\\Python38\\python.exe"
+            
+            pip {
+                install "ytmusicapi"
+                install "yt-dlp"
+                install "requests"
+            }
+            
+            sourceSets {
+                main {
+                    python.srcDir "src/main/python"
+                    assets.srcDirs += ["src/main/python"]
+                }
+            }
+        }
+
+        // Enable file access
+        ndk.abiFilters 'armeabi-v7a','arm64-v8a'
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+flutter {
+    source '../..'
+}
